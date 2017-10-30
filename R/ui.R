@@ -1,16 +1,29 @@
 source("globals.R")
 
 ui <- fluidPage(
+  
   selectInput(
-    inputId = "sectors",
-    label = "Choose Sectors",
-    choices = sectors,
+    inputId = "exchange_select",
+    label = "Choose Exchange Market",
+    choices = exchange,
     multiple = TRUE
   ),
+  
   selectInput(
-    inputId = "names",
-    label = "Choose Stocks",
-    choices = paste(symbols, names, sep=" - "),
+  inputId = "sectors_select",
+  label = "Choose Sectors",
+    choices = sectors[!is.na(sectors)],
     multiple = TRUE
-  )
+  ),
+  
+  selectInput(
+    inputId = "industries_select",
+    label = "Choose Industries",
+    choices = industries[!is.na(industries)],
+    multiple = TRUE
+  ),
+  
+  #htmlOutput("names_select"),
+  
+  DT::dataTableOutput("stocks")
 )
