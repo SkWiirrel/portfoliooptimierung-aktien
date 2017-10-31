@@ -58,4 +58,13 @@ server <- function(input, output){
   }, ignoreNULL = FALSE)
   
   reactive(renderTable())
+  
+  output$rows_selected = renderPrint({
+    s = input$stocks_rows_selected
+    if (length(s)) {
+      cat('These rows were selected:\n\n')
+      cat(s, sep = ', ')
+    }
+  })
+  
 }
