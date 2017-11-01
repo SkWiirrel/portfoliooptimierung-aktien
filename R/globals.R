@@ -9,5 +9,6 @@ stockData <- stockSymbols()
 exchange <- stockData$Exchange
 names <- stockData$Name
 industries <- stockData$Industry
+lastSale <- stockData$LastSale
 symbols <- stockData$Symbol
 sectors <- stockData$Sector
