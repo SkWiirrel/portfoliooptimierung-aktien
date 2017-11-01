@@ -78,5 +78,5 @@ ui <- fluidPage(
        DT::dataTableOutput("stocks"),
        plotOutput("stocks_plot")
     )
-  ),
+  )
 )
