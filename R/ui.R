@@ -19,32 +19,32 @@ ui <- fluidPage(
     )
   ),
   
-  navbarPage(pageTitle),
+  navbarPage(pageTitle), #Die ganz obere schwarze navigationsbar mit dem titel
   
-  fluidRow(
+  fluidRow( #3 Spalten breit muss der untere Code sein
     column(3,
        wellPanel(
         tags$h4("Filters"),
         selectInput(
           inputId = "exchange_select",
           label = "Exchange Market",
-          choices = exchange,
+          choices = exchange, 
           multiple = TRUE,
           width = '100%'
         ),
         selectInput(
           inputId = "sectors_select",
           label = "Sectors",
-          choices = sectors[!is.na(sectors)],
+          choices = sectors[!is.na(sectors)], #Alle Informationen aus der Spalte "Sectors" ausser jene mit NA 
           multiple = TRUE,
           width = '100%'
         ),
         selectInput(
           inputId = "industries_select",
           label = "Industries",
-          choices = industries[!is.na(industries)],
+          choices = industries[!is.na(industries)], #is.na(industries) na = not Available 
           multiple = TRUE,
-          width = '100%'
+          width = '100%' 
         ),
         sliderInput(
           inputId = "lastSale_select", 
@@ -74,10 +74,10 @@ ui <- fluidPage(
          )
        )
     ),
-    column(9,
-       DT::dataTableOutput("stocks"),
-       #plotOutput("stocks_preview_plot"),
-       tags$div(id = 'stocks_plot_placeholder') 
+    column(9, #9 Spalte breit muss dieser Abschnitt sein (dort wo die aktiendaten drinnen sind)
+       DT::dataTableOutput("stocks"), #Platzhalter für die Datatable mit der Benennung "Stocks" 
+       #plotOutput("stocks_preview_plot"), 
+       tags$div(id = 'stocks_plot_placeholder') #Tags - baut HTML Tags auf (div) und gibt ihm die Id - stocks_plot_placeholder zum nachträglichen ansprechen in Server
     )
   )
 )
