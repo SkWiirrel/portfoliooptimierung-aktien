@@ -127,7 +127,6 @@
     }
   }, ignoreNULL = FALSE)
   
-  
   #Needed to render table on start
   #reactive(renderTable()) #
   }
