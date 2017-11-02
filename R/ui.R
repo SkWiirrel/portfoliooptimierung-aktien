@@ -76,7 +76,7 @@ ui <- fluidPage(
     ),
     column(9,
        DT::dataTableOutput("stocks"),
-       plotOutput("stocks_preview_plot"),
+       #plotOutput("stocks_preview_plot"),
        tags$div(id = 'stocks_plot_placeholder') 
     )
   )

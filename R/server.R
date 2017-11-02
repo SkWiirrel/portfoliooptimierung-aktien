@@ -37,6 +37,9 @@
       pageLength = 10,
       initComplete = JS("function(settings, json) {console.log('Done.');}")
     ))
+
+    #superselector to assign to global variable
+    symbols <<- filteredStockData$Symbol
   }
   
   observeEvent({
@@ -54,24 +57,25 @@
     updateSelectInput(session, inputId = "sectors_select", selected = NA)
     updateSelectInput(session, inputId = "industries_select", selected = NA)
     updateSliderInput(session, inputId = "lastSale_select", value = c(min(lastSale, na.rm = TRUE), max(lastSale, na.rm = TRUE)))
+    renderTable()
   })
   
-  output$stocks_preview_plot <- renderPlot({
-    #Get the timeseries for selected rows
-    s = input$stocks_rows_selected
-    lastSelectSymbol = symbols[s[length(s)]]
-  
-    if(length(s)){
-      symbol_data <- require_symbol(lastSelectSymbol, symbol_env)
-    
-      chartSeries(
-        symbol_data,
-        name = lastSelectSymbol,
-        type = input$chart_type,
-        theme = "white"
-      )
-    }
-  })
+  # output$stocks_preview_plot <- renderPlot({
+  #   #Get the timeseries for selected rows
+  #   s = input$stocks_rows_selected
+  #   lastSelectSymbol = symbols[s[length(s)]]
+  # 
+  #   if(length(s)){
+  #     symbol_data <- require_symbol(lastSelectSymbol, symbol_env)
+  #   
+  #     chartSeries(
+  #       symbol_data,
+  #       name = lastSelectSymbol,
+  #       type = input$chart_type,
+  #       theme = "white"
+  #     )
+  #   }
+  # })
   
   
   observeEvent(input$stocks_rows_selected, {
@@ -121,7 +125,7 @@
         i <- i + 1
       }
     }
-  })
+  }, ignoreNULL = FALSE)
   
   
   #Needed to render table on start
