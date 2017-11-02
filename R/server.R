@@ -1,7 +1,7 @@
-# Helpful Resources:
-## https://gist.github.com/wch/4026749
-## https://gist.github.com/wch/5436415/
-server <- function(input, output, session){
+  # Helpful Resources:
+  ## https://gist.github.com/wch/4026749
+  ## https://gist.github.com/wch/5436415/
+  server <- function(input, output, session){
   
   # Create an environment for storing data
   symbol_env <- new.env()
@@ -56,25 +56,74 @@ server <- function(input, output, session){
     updateSliderInput(session, inputId = "lastSale_select", value = c(min(lastSale, na.rm = TRUE), max(lastSale, na.rm = TRUE)))
   })
   
-  output$stocks_plot <- renderPlot({
-    
+  output$stocks_preview_plot <- renderPlot({
     #Get the timeseries for selected rows
     s = input$stocks_rows_selected
     lastSelectSymbol = symbols[s[length(s)]]
-
+  
     if(length(s)){
       symbol_data <- require_symbol(lastSelectSymbol, symbol_env)
     
       chartSeries(
-         symbol_data,
-          name = lastSelectSymbol,
-          type = input$chart_type,
-          theme = "white"
+        symbol_data,
+        name = lastSelectSymbol,
+        type = input$chart_type,
+        theme = "white"
       )
+    }
+  })
+  
+  
+  observeEvent(input$stocks_rows_selected, {
+    
+    s = input$stocks_rows_selected
+    
+    removeUI(
+      selector = "#stocks_plot_placeholder .plotContainer",
+      multiple = TRUE
+    )
+    
+    if(length(s)){
+      
+      i <- 1
+      
+      while(i <= length(s)){
+        
+        #For whatever needed this is necessary
+        local({
+          
+          localI <- i
+        
+          symbol <- symbols[s[localI]]
+          plotId <- paste0("plot", symbol)
+          
+          insertUI(
+            selector = "#stocks_plot_placeholder",
+            # wrap element in a div with class for ease of removal
+            ui = tags$div(
+              plotOutput(plotId),
+              class = "plotContainer"
+            )
+          )
+          
+          symbol_data <- require_symbol(symbol, symbol_env)
+          
+          output[[plotId]] <- renderPlot({
+            chartSeries(
+              symbol_data,
+              name = symbol,
+              type = input$chart_type,
+              theme = "white"
+            )
+          })
+        })
+        
+        i <- i + 1
+      }
     }
   })
   
   
   #Needed to render table on start
   reactive(renderTable())
-}
+  }
