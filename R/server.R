@@ -32,6 +32,10 @@
     if(length(input$lastSale_select)){
       filteredStockData <- subset(filteredStockData, LastSale >= input$lastSale_select[1] & LastSale <= input$lastSale_select[2])
     }
+    #Filter data by user IPO selection
+    if(length(input$ipoYear_select)){
+      filteredStockData <- subset(filteredStockData, (IPOyear >= input$ipoYear_select[1] & IPOyear <= input$ipoYear_select[2]) | is.na(IPOyear))
+    }
     
     output$stocks <- DT::renderDataTable(filteredStockData, options = list( 
       pageLength = 10,
@@ -47,6 +51,7 @@
     input$sectors_select
     input$industries_select
     input$lastSale_select
+    input$ipoYear_select
     }, {
     renderTable() #Filtert die DT rechts abhängig von der Selektion
   }, ignoreNULL = FALSE) #auch wenn ich Information in einer Input Spalte lösche renderd er die Tabelle neu
@@ -57,6 +62,7 @@
     updateSelectInput(session, inputId = "sectors_select", selected = NA)
     updateSelectInput(session, inputId = "industries_select", selected = NA)
     updateSliderInput(session, inputId = "lastSale_select", value = c(min(lastSale, na.rm = TRUE), max(lastSale, na.rm = TRUE))) #den setzt er auf die gesamte Range von min-max
+    updateSliderInput(session, inputId = "ipoYear_select", value = c(min(ipoYear, na.rm = TRUE), max(ipoYear, na.rm = TRUE))) #den setzt er auf die gesamte Range von min-max
     renderTable()
   })
   

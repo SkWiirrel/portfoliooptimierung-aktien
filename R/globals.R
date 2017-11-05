@@ -10,6 +10,7 @@ exchange <- stockData$Exchange #Zugriff auf die Spalten der StockData tabelle
 names <- stockData$Name
 industries <- stockData$Industry
 lastSale <- stockData$LastSale
+ipoYear <- stockData$IPOyear
 symbols <- stockData$Symbol
 sectors <- stockData$Sector
  

@@ -2,23 +2,13 @@ source("globals.R")
 
 pageTitle <- "Portfoliooptimierung (Aktien)"
 
-ui <- fluidPage(
-  title = pageTitle,
-  
-  tags$head(
-    tags$link(rel = "stylesheet",
-              type = "text/css",
-              href = "bootswatch.yeti.css"),
-    tags$link(rel = "stylesheet",
-              type = "text/css",
-              href = "custom.css")
-  ),
-  
-  #Die ganz obere schwarze navigationsbar mit dem titel
-  navbarPage(
-    pageTitle,
-    tabPanel("Stock Selection",
-             fluidRow(
+ui <- navbarPage( #Die ganz obere schwarze navigationsbar mit dem titel
+   
+    title = pageTitle,
+    
+    tabPanel("1 - Stock Selection",
+             fixedPage(
+               fixedRow(
                #3 Spalten breit muss der untere Code sein
                column(
                  3,
@@ -49,10 +39,20 @@ ui <- fluidPage(
                    ),
                    sliderInput(
                      inputId = "lastSale_select",
-                     label = "Last Sale Range",
+                     label = "Last Sale",
                      min = min(lastSale, na.rm = TRUE),
                      max = max(lastSale, na.rm = TRUE),
                      value = c(min(lastSale, na.rm = TRUE), max(lastSale, na.rm = TRUE)),
+                     width = '100%'
+                   ),
+                   sliderInput(
+                     inputId = "ipoYear_select",
+                     label = "Initial Public Offering (IPO)",
+                     step = 1,
+                     sep = '',
+                     min = min(ipoYear, na.rm = TRUE),
+                     max = max(ipoYear, na.rm = TRUE),
+                     value = c(min(ipoYear, na.rm = TRUE), max(ipoYear, na.rm = TRUE)),
                      width = '100%'
                    ),
                    actionButton(
@@ -71,11 +71,9 @@ ui <- fluidPage(
                  #Platzhalter für die Datatable mit der Benennung "Stocks"
                  #plotOutput("stocks_preview_plot"),
                )
-             )),
-    tabPanel("Stock Plots",
-             fluidRow(#3 Spalten breit muss der untere Code sein
-               column(
-                 12,
+             ))),
+    tabPanel("2 - Stock Timeseries",
+        
                  wellPanel(
                    tags$h4("Chart Options"),
                    selectInput(
@@ -88,13 +86,29 @@ ui <- fluidPage(
                        "Line" = "line"
                      )
                    )
-                 )
-               ),
-               column(
-                 12,
+                 ),
+            
                  tags$div(id = 'stocks_plot_placeholder') #Tags - baut HTML Tags auf (div) und gibt ihm die Id - stocks_plot_placeholder zum nachträglichen ansprechen in Server
-               )
                
-               ))
+               
+               ),
+    tabPanel("3 - My Portfolio"),
+    
+    collapsible = FALSE,
+    windowTitle = pageTitle,
+    fluid = FALSE,
+    
+    header = tags$head(
+      tags$link(rel = "stylesheet",
+                type = "text/css",
+                href = "css/bootswatch.yeti.css"),
+      tags$link(rel = "stylesheet",
+                type = "text/css",
+                href = "css/Footer-white.css"), #Reference: https://tutorialzine.com/2016/10/freebie-5-fantastic-bootstrap-footers
+      tags$link(rel = "stylesheet",
+                type = "text/css",
+                href = "css/custom.css")
+    ),
+    
+    footer = includeHTML("www/html/Footer-white.html")
   )
-)
