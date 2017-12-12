@@ -3,6 +3,10 @@ library(DT) #http://rstudio.github.io/DT/shiny.html - Datatable - macht die Tabe
 library(quantmod) #Needed for retrieving timeseries - Holt sich den Chart für alle Aktien
 library(TTR) #Needed for the stockSymbols() function - TTR Daten werden in die DT reingeladen
 library(rsconnect) #ShinyApps.io (publish packet) : 24h gratis pro Monat und dann zahlen  
+library(timeSeries)
+library(tseries)
+library(fPortfolio)
+library(caTools)
 
 
 stockData <- stockSymbols() #Kommt vom TTR holt sich die ganzen Stock Data 

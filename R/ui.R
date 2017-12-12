@@ -3,7 +3,6 @@ source("globals.R")
 pageTitle <- "Portfoliooptimierung (Aktien)"
 
 ui <- navbarPage( #Die ganz obere schwarze navigationsbar mit dem titel
-   
     title = pageTitle,
     
     tabPanel("1 - Stock Selection",
@@ -58,6 +57,22 @@ ui <- navbarPage( #Die ganz obere schwarze navigationsbar mit dem titel
                    actionButton(
                      inputId = "reset_filter",
                      label = "Reset",
+                     icon = icon("refresh"),
+                     width = '100%',
+                     class = "btn-primary"
+                   ),
+                   numericInput(
+                     inputId = "wanted_interest", 
+                     label="interest", 
+                     value, 
+                     min = NA, 
+                     max = NA, 
+                     step = 0.1,
+                    width = '100%'
+                   ),
+                   actionButton(
+                     inputId = "calculate_portfolio",
+                     label = "Calculate",
                      icon = icon("refresh"),
                      width = '100%',
                      class = "btn-primary"
