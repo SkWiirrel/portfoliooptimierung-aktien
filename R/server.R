@@ -16,7 +16,7 @@
   }
   
   
-  data <- reactive({
+  data <- reactive({ #Hier wird die Tabelle in Tab 1 entsprechend der Kriterien gefiltert
     filteredStockData <- stockData #Lokale Kopie von StockData Tabelle
     #Filter data by user exchange selection
     if(length(input$exchange_select)){ #exchange select ist von der UI definiert so heisst das Auswahlfeld
@@ -39,7 +39,7 @@
       filteredStockData <- subset(filteredStockData, (IPOyear >= input$ipoYear_select[1] & IPOyear <= input$ipoYear_select[2]) | is.na(IPOyear))
     }
   })
-  
+  #Output ist die Tabelle links in Tab1 aber diese aktualisiert sich automatisch aufgrund der Reaktivität
   output$stocks <- DT::renderDataTable(data(), options = list( 
     pageLength = 10,
     initComplete = JS("function(settings, json) {console.log('Done.');}")
@@ -140,7 +140,7 @@
           localI <- i
         
           symbol <- symbols[s[localI]] #Liste aller CODES der gewählten Aktien auf Basis der Symbols liste die bisher nur die Zeilennummern hatte
-          plotId <- paste0("plot", symbol) #Konkateniert mit plot+symbol-spalteninfo
+          plotId <- paste0("plot", symbol) #Konkateniert mit plot+symbol-spalteninfo 
           #ELI - hier könnte der Vektor der verwendeten Anteile generiert werden.
           
           insertUI( #insertUI standard Funktion zum einfügen der Charts
