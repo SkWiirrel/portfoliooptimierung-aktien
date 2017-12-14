@@ -15,6 +15,15 @@
   
   }
   
+  searchResult<- reactive({
+    #symbols 
+    input$stocks_rows_selected
+    subset(stockData, stockData$Symbol %in% shList)
+    #filterSymbols <- shList
+    #subset(symbols, Symbol %in% shList)
+  })
+  
+
   
   data <- reactive({ #Hier wird die Tabelle in Tab 1 entsprechend der Kriterien gefiltert
     filteredStockData <- stockData #Lokale Kopie von StockData Tabelle
@@ -38,6 +47,7 @@
     if(length(input$ipoYear_select)){
       filteredStockData <- subset(filteredStockData, (IPOyear >= input$ipoYear_select[1] & IPOyear <= input$ipoYear_select[2]) | is.na(IPOyear))
     }
+
   })
   #Output ist die Tabelle links in Tab1 aber diese aktualisiert sich automatisch aufgrund der Reaktivität
   output$stocks <- DT::renderDataTable(data(), options = list( 
@@ -120,9 +130,9 @@
   
   
   observeEvent(input$stocks_rows_selected, { #stocks_rows_selected ist standardvar von DT welche anzeigt wie stocks_* da DT bei uns stocks heisst
-    
+
     s = input$stocks_rows_selected #Gibt eine Liste mit den ausgewählten Zeilennummern zurück 
-    
+    localVec <- vector() 
     removeUI( #RemoveUI Standard Funktion von Shiny
       selector = "#stocks_plot_placeholder .plotContainer", # CSS - Löscht die Charts weg stocks_plot_placeholder haben wir im UI als tag definiert
       multiple = TRUE #alle die er findet werden gelöscht 
@@ -133,16 +143,20 @@
       i <- 1
       
       while(i <= length(s)){
-        
+
         #For whatever needed this is necessary
         local({
-          
-          localI <- i
         
+          localI <- i
+ 
+          
+          # <<- c(share,symbols[s[localI]])
           symbol <- symbols[s[localI]] #Liste aller CODES der gewählten Aktien auf Basis der Symbols liste die bisher nur die Zeilennummern hatte
           plotId <- paste0("plot", symbol) #Konkateniert mit plot+symbol-spalteninfo 
           #ELI - hier könnte der Vektor der verwendeten Anteile generiert werden.
-          
+          localVec[[localI]] <<- symbols[s[localI]]
+         # shList[[i]] <- symbols[s[localI]]
+         # print(localVec)
           insertUI( #insertUI standard Funktion zum einfügen der Charts
             selector = "#stocks_plot_placeholder",
             # wrap element in a div with class for ease of removal
@@ -151,7 +165,9 @@
               class = "plotContainer" #das wird benötigt für RemoveUI später "#" steht für iD und "." für Klasse
             )
           )
-          
+
+         # print(shList)
+
           symbol_data <- require_symbol(symbol, symbol_env) #Funktion RequireSymbol in Zeile 9 definiert 
           
           output[[plotId]] <- renderPlot({ #Hier rendert er mir die Daten nachdem sie in require Symbol geladen wurden
@@ -163,11 +179,18 @@
             )
           })
         })
-        
+        shList <<- localVec
+
         i <- i + 1
       }
+      
+      output$vars <- renderUI({ 
+        selectInput("Share selection", "Select your choice", searchResult()[,1])
+      })
+
     }
   }, ignoreNULL = FALSE)
+  
   
   #Needed to render table on start
   #reactive(renderTable()) #

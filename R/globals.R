@@ -1,4 +1,5 @@
 library(shiny)
+library(shinydashboard)
 library(DT) #http://rstudio.github.io/DT/shiny.html - Datatable - macht die Tabelle in der UI 
 library(quantmod) #Needed for retrieving timeseries - Holt sich den Chart für alle Aktien
 library(TTR) #Needed for the stockSymbols() function - TTR Daten werden in die DT reingeladen
@@ -17,4 +18,4 @@ lastSale <- stockData$LastSale
 ipoYear <- stockData$IPOyear
 symbols <- stockData$Symbol
 sectors <- stockData$Sector
- 
+shList <- vector()

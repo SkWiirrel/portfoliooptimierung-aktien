@@ -1,17 +1,19 @@
 source("globals.R")
 
+
 pageTitle <- "Portfoliooptimierung (Aktien)"
 
 ui <- navbarPage( #Die ganz obere schwarze navigationsbar mit dem titel
     title = pageTitle,
     
     tabPanel("1 - Stock Selection",
-             fixedPage(
-               fixedRow(
+             sidebarLayout(
+               #headerPanel(""),
+               #fixedRow(
                #3 Spalten breit muss der untere Code sein
-               column(
-                 3,
-                 wellPanel(
+               sidebarPanel(
+                 #3,
+                 #wellPanel(
                    tags$h4("Filters"),
                    selectInput(
                      inputId = "exchange_select",
@@ -70,6 +72,7 @@ ui <- navbarPage( #Die ganz obere schwarze navigationsbar mit dem titel
                      step = 0.1,
                     width = '100%'
                    ),
+                  htmlOutput("vars"),
                    actionButton(
                      inputId = "calculate_portfolio",
                      label = "Calculate",
@@ -77,19 +80,19 @@ ui <- navbarPage( #Die ganz obere schwarze navigationsbar mit dem titel
                      width = '100%',
                      class = "btn-primary"
                    )
-                 )
+                 
                ),
-               column(
-                 9,
+               mainPanel(
+                 #9,
                  #9 Spalte breit muss dieser Abschnitt sein (dort wo die aktiendaten drinnen sind)
                  DT::dataTableOutput("stocks")
                  #Platzhalter für die Datatable mit der Benennung "Stocks"
                  #plotOutput("stocks_preview_plot"),
                )
-             ))),
+             )),
     tabPanel("2 - Stock Timeseries",
         
-                 wellPanel(
+                 #wellPanel(
                    tags$h4("Chart Options"),
                    selectInput(
                      inputId = "chart_type",
@@ -100,7 +103,7 @@ ui <- navbarPage( #Die ganz obere schwarze navigationsbar mit dem titel
                        "Bar" = "bars",
                        "Line" = "line"
                      )
-                   )
+                   #)
                  ),
             
                  tags$div(id = 'stocks_plot_placeholder') #Tags - baut HTML Tags auf (div) und gibt ihm die Id - stocks_plot_placeholder zum nachträglichen ansprechen in Server
