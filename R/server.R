@@ -109,6 +109,27 @@
   observeEvent(input$calculate_portfolio, { #Listened auf den Rest Button - bei Klick wird ALLES zurpckgesetzt
     #Hier kommt der Aufruf der Markowitz Methode zum tragen 
     #renderTable()
+    # read closing prices from Yahoo keeping only the closing prices
+    
+    ClosingPricesRead <- NULL
+    for (Ticker in shList)
+      ClosingPricesRead <- cbind(ClosingPricesRead,
+                                 getSymbols.yahoo(Ticker, from="1950-01-01", verbose=FALSE, auto.assign=FALSE)[,6]) # [,6] = keep the adjusted prices
+    
+    # keep only the dates that have closing prices for all tickers
+    
+    ClosingPrices <- ClosingPricesRead[apply(ClosingPricesRead,1,function(x) all(!is.na(x))),]
+    
+    # convert prices to daily returns
+    
+    returns <- as.timeSeries(tail(ClosingPrices,-1) / as.numeric(head(ClosingPrices,-1)) - 1)
+    
+    # calculate the efficient frontier
+    
+    Frontier <- portfolioFrontier(returns)
+    
+    # plot frontier
+   output$frontier <- renderPlot({ plot(Frontier,1)})  # can also call the plot routine so it only plots the frontier: plot(Frontier,1)
   })
   
   # output$stocks_preview_plot <- renderPlot({
