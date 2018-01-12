@@ -79,15 +79,41 @@
     
     returns <- as.timeSeries(tail(ClosingPrices,-1) / as.numeric(head(ClosingPrices,-1)) - 1)
     
+    
+    
     # calculate the efficient frontier
     
-     Frontier <- portfolioFrontier(returns)
+     Frontier <- portfolioFrontier(returns, constraints = "LongOnly")
+     
+     frontierWeights <- getWeights(Frontier)
      
     # constraints = "minW[0]=0.34"
     
     # plot frontier
    output$frontier <- renderPlot({ plot(Frontier,c(1,2,3,4))})  # can also call the plot routine so it only plots the frontier: plot(Frontier,1)
-   # output$verbose <- renderText({ toString(getSeries(Frontier)) })
+
+   # plot Sharpe ratios for each point on the efficient frontier
+   output$sharpe <- renderPlot({
+     riskReturnPoints <- frontierPoints(Frontier) # get risk and return values for points on the efficient frontier
+     annualizedPoints <- data.frame(targetRisk=riskReturnPoints[, "targetRisk"] * sqrt(252),
+                                    targetReturn=riskReturnPoints[,"targetReturn"] * 252)
+     riskFreeRate <- 0
+     plot((annualizedPoints[,"targetReturn"]-riskFreeRate) / annualizedPoints[,"targetRisk"], xlab="Point on efficient frontier", ylab="Sharpe ratio")
+   })
+   
+   #Plot MVP Weights: Basic Graphs
+   output$mvpWeight <- renderPlot({
+     mvp <- minvariancePortfolio(returns, spec=portfolioSpec(), constraints="LongOnly")
+     mvp
+     tangencyPort <- tangencyPortfolio(returns, spec=portfolioSpec(), constraints="LongOnly")
+     tangencyPort
+     mvpweights <- getWeights(mvp)
+     tangencyweights <- getWeights(tangencyPort)
+     covRisk(returns, mvpweights)
+     varRisk(returns, mvpweights, alpha = 0.05)
+     cvarRisk(returns, mvpweights, alpha = 0.05)
+     barplot(mvpweights, main="Minimum Variance Portfolio Weights", xlab="Assset", ylab="Weight In Portfolio (%)", col=cm.colors(ncol(frontierWeights)+2), legend=colnames(weights))
+   })
   })
   
   observeEvent(input$stocks_rows_selected, { #stocks_rows_selected ist standardvar von DT welche anzeigt wie stocks_* da DT bei uns stocks heisst

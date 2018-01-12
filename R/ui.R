@@ -112,7 +112,8 @@ ui <- navbarPage( #Die ganz obere schwarze navigationsbar mit dem titel
                ),
     tabPanel("3 - My Portfolio",
              plotOutput("frontier"),
-             plotOutput("annualized"),
+             plotOutput("sharpe"),
+             plotOutput("mvpWeight"),
              verbatimTextOutput("verbose")
              
              ),
