@@ -19,8 +19,6 @@
     #symbols 
     input$stocks_rows_selected
     subset(stockData, stockData$Symbol %in% shList)
-    #filterSymbols <- shList
-    #subset(symbols, Symbol %in% shList)
   })
   
 
@@ -55,48 +53,6 @@
     initComplete = JS("function(settings, json) {console.log('Done.');}")
   ))
   
-  #renderTable <- function(){ #führt nach observEvent die Filterung aus
-#    filteredStockData <- stockData #Lokale Kopie von StockData Tabelle
- #     #Filter data by user exchange selection
-#    if(length(input$exchange_select)){ #exchange select ist von der UI definiert so heisst das Auswahlfeld
-#      filteredStockData <- subset(filteredStockData, Exchange %in% input$exchange_select) #nehme nur jene wo in der Spate Exchange etwas dabei ist was in der var exchange_select drinnen ist. 
-#    }
-#    #Filter data by user sector selection
-#    if(length(input$sectors_select)){
-#      filteredStockData <- subset(filteredStockData, Sector %in% input$sectors_select)
-#    }
-#    #Filter data by user industries selection
-#    if(length(input$industries_select)){
-#      filteredStockData <- subset(filteredStockData, Industry %in% input$industries_select)
-#    }
-#    #Filter data by user last sale selection
-#    if(length(input$lastSale_select)){
-#      filteredStockData <- subset(filteredStockData, LastSale >= input$lastSale_select[1] & LastSale <= input$lastSale_select[2])
- #   }
-    #Filter data by user IPO selection
-#    if(length(input$ipoYear_select)){
-#     filteredStockData <- subset(filteredStockData, (IPOyear >= input$ipoYear_select[1] & IPOyear <= input$ipoYear_select[2]) | is.na(IPOyear))
-#    }
-    
-#    output$stocks <- DT::renderDataTable(filteredStockData, options = list( 
-#      pageLength = 10,
-#      initComplete = JS("function(settings, json) {console.log('Done.');}")
-#    ))
-    
-    #superselector to assign to global variable
- #   symbols <<- filteredStockData$Symbol #Von den gefilterten Tabelle (filteredStockData) nur die Symbol-Spalte in form eine Liste namens "Symbols" speichern (zur späteren Anzeige der Charts)
-#  } #<<- da diese Variable global definiert wurde
-  
-#  observeEvent({ #welche Inputs sollen observiert haben also sobald in diesen Inputs was passiert wird renderTable aufgerufen
-#    input$exchange_select
-#    input$sectors_select
-#    input$industries_select
-#    input$lastSale_select
-#    input$ipoYear_select
-#    }, {
-#    renderTable() #Filtert die DT rechts abhängig von der Selektion
-#  }, ignoreNULL = FALSE) #auch wenn ich Information in einer Input Spalte lösche renderd er die Tabelle neu
-  
   #Reset filter inputs to initial state
   observeEvent(input$reset_filter, { #Listened auf den Rest Button - bei Klick wird ALLES zurpckgesetzt
     updateSelectInput(session, inputId = "exchange_select", selected = NA) #updateselect input ist ne fertig std. Methode und löscht in allesn INPUTS die gesetzten Informationen
@@ -108,7 +64,6 @@
   })
   observeEvent(input$calculate_portfolio, { #Listened auf den Rest Button - bei Klick wird ALLES zurpckgesetzt
     #Hier kommt der Aufruf der Markowitz Methode zum tragen 
-    #renderTable()
     # read closing prices from Yahoo keeping only the closing prices
     
     ClosingPricesRead <- NULL
@@ -126,29 +81,14 @@
     
     # calculate the efficient frontier
     
-    Frontier <- portfolioFrontier(returns)
+     Frontier <- portfolioFrontier(returns)
+     
+    # constraints = "minW[0]=0.34"
     
     # plot frontier
-   output$frontier <- renderPlot({ plot(Frontier,1)})  # can also call the plot routine so it only plots the frontier: plot(Frontier,1)
+   output$frontier <- renderPlot({ plot(Frontier,c(1,2,3,4))})  # can also call the plot routine so it only plots the frontier: plot(Frontier,1)
+   # output$verbose <- renderText({ toString(getSeries(Frontier)) })
   })
-  
-  # output$stocks_preview_plot <- renderPlot({
-  #   #Get the timeseries for selected rows
-  #   s = input$stocks_rows_selected
-  #   lastSelectSymbol = symbols[s[length(s)]]
-  # 
-  #   if(length(s)){
-  #     symbol_data <- require_symbol(lastSelectSymbol, symbol_env)
-  #   
-  #     chartSeries(
-  #       symbol_data,
-  #       name = lastSelectSymbol,
-  #       type = input$chart_type,
-  #       theme = "white"
-  #     )
-  #   }
-  # })
-  
   
   observeEvent(input$stocks_rows_selected, { #stocks_rows_selected ist standardvar von DT welche anzeigt wie stocks_* da DT bei uns stocks heisst
 
@@ -176,8 +116,6 @@
           plotId <- paste0("plot", symbol) #Konkateniert mit plot+symbol-spalteninfo 
           #ELI - hier könnte der Vektor der verwendeten Anteile generiert werden.
           localVec[[localI]] <<- symbols[s[localI]]
-         # shList[[i]] <- symbols[s[localI]]
-         # print(localVec)
           insertUI( #insertUI standard Funktion zum einfügen der Charts
             selector = "#stocks_plot_placeholder",
             # wrap element in a div with class for ease of removal
@@ -186,8 +124,6 @@
               class = "plotContainer" #das wird benötigt für RemoveUI später "#" steht für iD und "." für Klasse
             )
           )
-
-         # print(shList)
 
           symbol_data <- require_symbol(symbol, symbol_env) #Funktion RequireSymbol in Zeile 9 definiert 
           
@@ -206,13 +142,10 @@
       }
       
       output$vars <- renderUI({ 
-        selectInput("Share selection", "Select your choice", searchResult()[,1])
+        selectInput("share_selection", "Select your choice", searchResult()[,1])
       })
 
     }
   }, ignoreNULL = FALSE)
   
-  
-  #Needed to render table on start
-  #reactive(renderTable()) #
   }

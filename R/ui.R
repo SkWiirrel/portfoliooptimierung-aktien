@@ -67,9 +67,9 @@ ui <- navbarPage( #Die ganz obere schwarze navigationsbar mit dem titel
                      inputId = "wanted_interest", 
                      label="interest", 
                      value, 
-                     min = NA, 
-                     max = NA, 
-                     step = 0.1,
+                     min = 0.1, 
+                     max = 1, 
+                     step = 0.01,
                     width = '100%'
                    ),
                   htmlOutput("vars"),
@@ -111,8 +111,9 @@ ui <- navbarPage( #Die ganz obere schwarze navigationsbar mit dem titel
                
                ),
     tabPanel("3 - My Portfolio",
-             plotOutput("frontier")
-             
+             plotOutput("frontier"),
+             plotOutput("annualized"),
+             verbatimTextOutput("verbose")
              
              ),
     
