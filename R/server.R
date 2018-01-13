@@ -87,6 +87,8 @@
      
      frontierWeights <- getWeights(Frontier)
      
+     Spec = portfolioSpec()
+     
     # constraints = "minW[0]=0.34"
     
     # plot frontier

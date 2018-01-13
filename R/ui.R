@@ -64,13 +64,36 @@ ui <- navbarPage( #Die ganz obere schwarze navigationsbar mit dem titel
                      class = "btn-primary"
                    ),
                    numericInput(
-                     inputId = "wanted_interest", 
-                     label="interest", 
+                     inputId = "minimum_weight", 
+                     label="Mininum Weight", 
                      value, 
-                     min = 0.1, 
-                     max = 1, 
-                     step = 0.01,
+                     min = 1, 
+                     max = 100, 
+                     step = 1,
                     width = '100%'
+                   ),
+                   numericInput(
+                     inputId = "maximum_weight", 
+                     label="Maximum Weight", 
+                     value, 
+                     min = 1, 
+                     max = 100, 
+                     step = 1,
+                     width = '100%'
+                   ),
+                   numericInput(
+                     inputId = "target_risk", 
+                     label="Target Risk", 
+                     value, 
+                     step = 1,
+                     width = '100%'
+                   ),
+                   numericInput(
+                     inputId = "target_return", 
+                     label="Target Return", 
+                     value, 
+                     step = 1,
+                     width = '100%'
                    ),
                   htmlOutput("vars"),
                    actionButton(
