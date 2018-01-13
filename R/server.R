@@ -92,8 +92,34 @@
     # constraints = "minW[0]=0.34"
     
     # plot frontier
-   output$frontier <- renderPlot({ plot(Frontier,c(1,2,3,4))})  # can also call the plot routine so it only plots the frontier: plot(Frontier,1)
+   output$frontier <- renderPlot({ 
+     Spec = portfolioSpec()
+     setSolver(Spec) = "solveRshortExact"
+     setTargetRisk(Spec) = .12
+     constraints <- c("minW[1:length(shList)]=[input$minimum_weight]","maxW[1:length(shList)]=[input$maximum]", "Short")
+     effFrontierShort <- portfolioFrontier(returns, Spec, constraints = constraints)
+     weights <- getWeights(effFrontierShort)
+     # plot(Frontier,c(1,2,3,4))})  # can also call the plot routine so it only plots the frontier: plot(Frontier,1)
 
+     plot(effFrontierShort, c(1, 2, 3))})
+   
+   output$frontierWeights <- renderPlot({
+     Spec = portfolioSpec()
+     setSolver(Spec) = "solveRshortExact"
+     setTargetRisk(Spec) = .12
+     constraints <- c("minW[1:length(shList)]=[input$minimum_weight]","maxW[1:length(shList)]=[input$maximum]", "Short")
+     effFrontierShort <- portfolioFrontier(returns, Spec, constraints = constraints)
+     weights <- getWeights(effFrontierShort)
+     #Plot Frontier Weights (Need to transpose matrix first)
+     barplot(t(weights), main="Frontier Weights", col=cm.colors(ncol(weights)+2), legend=colnames(weights))
+     
+     effPortShort <- minvariancePortfolio(returns, Spec, constraints=constraints)
+     optWeights <- getWeights(effPortShort)
+     tanPortShort <- tangencyPortfolio(returns, Spec, constraints=constraints)
+     tanWeights <- getWeights(tanPortShort)
+     maxR <- maxreturnPortfolio(returns , Spec, constraints=constraints)
+     maxWeights <- getWeights(maxR)
+   })
    # plot Sharpe ratios for each point on the efficient frontier
    output$sharpe <- renderPlot({
      riskReturnPoints <- frontierPoints(Frontier) # get risk and return values for points on the efficient frontier
