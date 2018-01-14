@@ -96,7 +96,7 @@
      Spec = portfolioSpec()
      setSolver(Spec) = "solveRshortExact"
      setTargetRisk(Spec) = .12
-     constraints <- c("minW[1:length(shList)]=[input$minimum_weight]","maxW[1:length(shList)]=[input$maximum]", "Short")
+     constraints <- c("minW[1:length(shList)]=[input$minimum_weight]","maxW[1:length(shList)]=[input$maximum_weight]", "Short")
      effFrontierShort <- portfolioFrontier(returns, Spec, constraints = constraints)
      weights <- getWeights(effFrontierShort)
      # plot(Frontier,c(1,2,3,4))})  # can also call the plot routine so it only plots the frontier: plot(Frontier,1)
@@ -107,7 +107,7 @@
      Spec = portfolioSpec()
      setSolver(Spec) = "solveRshortExact"
      setTargetRisk(Spec) = .12
-     constraints <- c("minW[1:length(shList)]=[input$minimum_weight]","maxW[1:length(shList)]=[input$maximum]", "Short")
+     constraints <- c("minW[1:length(shList)]=[input$minimum_weight]","maxW[1:length(shList)]=[input$maximum_weight]", "Short")
      effFrontierShort <- portfolioFrontier(returns, Spec, constraints = constraints)
      weights <- getWeights(effFrontierShort)
      #Plot Frontier Weights (Need to transpose matrix first)
