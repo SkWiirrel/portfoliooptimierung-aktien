@@ -100,19 +100,19 @@ ui <- navbarPage( #Die ganz obere schwarze navigationsbar mit dem titel
                  numericInput(
                    inputId = "minimum_weight", 
                    label="Mininum Weight", 
-                   value, 
-                   min = 1, 
-                   max = 100, 
-                   step = 1,
+                   value = 0, 
+                   min = 0, 
+                   max = 1, 
+                   step = .1,
                    width = '100%'
                  ),
                  numericInput(
                    inputId = "maximum_weight", 
                    label="Maximum Weight", 
-                   value, 
-                   min = 1, 
-                   max = 100, 
-                   step = 1,
+                   value = 1, 
+                   min = 0, 
+                   max = 1, 
+                   step = .1,
                    width = '100%'
                  ),
                  numericInput(
