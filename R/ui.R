@@ -62,48 +62,7 @@ ui <- navbarPage( #Die ganz obere schwarze navigationsbar mit dem titel
                      icon = icon("refresh"),
                      width = '100%',
                      class = "btn-primary"
-                   ),
-                   numericInput(
-                     inputId = "minimum_weight", 
-                     label="Mininum Weight", 
-                     value, 
-                     min = 1, 
-                     max = 100, 
-                     step = 1,
-                    width = '100%'
-                   ),
-                   numericInput(
-                     inputId = "maximum_weight", 
-                     label="Maximum Weight", 
-                     value, 
-                     min = 1, 
-                     max = 100, 
-                     step = 1,
-                     width = '100%'
-                   ),
-                   numericInput(
-                     inputId = "target_risk", 
-                     label="Target Risk", 
-                     value, 
-                     step = 1,
-                     width = '100%'
-                   ),
-                   numericInput(
-                     inputId = "target_return", 
-                     label="Target Return", 
-                     value, 
-                     step = 1,
-                     width = '100%'
-                   ),
-                  htmlOutput("vars"),
-                   actionButton(
-                     inputId = "calculate_portfolio",
-                     label = "Calculate",
-                     icon = icon("refresh"),
-                     width = '100%',
-                     class = "btn-primary"
                    )
-                 
                ),
                mainPanel(
                  #9,
@@ -134,13 +93,59 @@ ui <- navbarPage( #Die ganz obere schwarze navigationsbar mit dem titel
                
                ),
     tabPanel("3 - My Portfolio",
+             sidebarLayout(
+               sidebarPanel(
+                 tags$h4("Options"),
+                 htmlOutput("vars"),
+                 numericInput(
+                   inputId = "minimum_weight", 
+                   label="Mininum Weight", 
+                   value, 
+                   min = 1, 
+                   max = 100, 
+                   step = 1,
+                   width = '100%'
+                 ),
+                 numericInput(
+                   inputId = "maximum_weight", 
+                   label="Maximum Weight", 
+                   value, 
+                   min = 1, 
+                   max = 100, 
+                   step = 1,
+                   width = '100%'
+                 ),
+                 numericInput(
+                   inputId = "target_risk", 
+                   label="Target Risk", 
+                   value, 
+                   step = 1,
+                   width = '100%'
+                 ),
+                 numericInput(
+                   inputId = "target_return", 
+                   label="Target Return", 
+                   value, 
+                   step = 1,
+                   width = '100%'
+                 ),
+                 actionButton(
+                   inputId = "calculate_portfolio",
+                   label = "Calculate",
+                   icon = icon("bar-chart"),
+                   width = '100%',
+                   class = "btn-primary"
+                 )
+               ),
+               mainPanel(
              plotOutput("frontier"),
              plotOutput("frontierWeights"),
              plotOutput("sharpe"),
              plotOutput("mvpWeight"),
              verbatimTextOutput("verbose")
-             
-             ),
+               )
+             )
+    ),
     
     collapsible = FALSE,
     windowTitle = pageTitle,
